@@ -32,7 +32,7 @@ namespace Service
         public PaypalService(IOptions<PayPalSettings> credentials)
         {
             _credentials = credentials.Value;
-
+            
             _sandboxEnvironment = new SandboxEnvironment(credentials.Value.ClientId, credentials.Value.Secret);
 
         }
@@ -105,7 +105,7 @@ namespace Service
                     UnitAmount = new PayPalCheckoutSdk.Orders.Money()
                     {
                         CurrencyCode = "EUR",
-                        Value = item.Price.ToString()
+                        Value = item.Price.MyToString()
                     }
                 });
             }
@@ -113,20 +113,22 @@ namespace Service
             AmountWithBreakdown amount = new AmountWithBreakdown
             {
                 CurrencyCode = "EUR",
-                Value = TotalToPay(total_amount).ToString(),
+                Value = TotalToPay(total_amount).MyToString(),
 
                 AmountBreakdown = new AmountBreakdown
                 {
                     ItemTotal = new Money { CurrencyCode = "EUR", Value = total_amount.ToString() },
-                    //TaxTotal = new Money
-                    //{
-                    //    CurrencyCode = "EUR",
-                    //    //Value = (total_amount + total_amount * TransactionPayments.Tax).ToString()
-                    //    Value = total_amount.ToString()
-                    //},
-                    Shipping = new Money { CurrencyCode = "EUR", Value = TransactionPayments.Shipping.ToString() },
-                    Handling = new Money { CurrencyCode = "EUR", Value = TransactionPayments.Handling.ToString() },
-                    Discount = new Money { CurrencyCode = "EUR", Value = TransactionPayments.Discount.ToString() },
+                    TaxTotal = new Money
+                    {
+                        CurrencyCode = "EUR",
+                        Value = (total_amount * TransactionPayments.Tax).MyToString()
+                        
+                    },
+                    Shipping = new Money { CurrencyCode = "EUR", Value = TransactionPayments.Shipping.MyToString() },
+                    Handling = new Money { CurrencyCode = "EUR", Value = TransactionPayments.Handling.MyToString() },
+                    Discount = new Money { 
+                        CurrencyCode = "EUR", 
+                        Value = (total_amount * TransactionPayments.Discount).MyToString() },
 
 
                 }
@@ -159,7 +161,8 @@ namespace Service
                 SoftDescriptor = "HighElectronics",
                 AmountWithBreakdown = amount,
                 Items = items,
-                ShippingDetail = shippingDetail,
+                ShippingDetail = shippingDetail
+                
 
             };
         }
@@ -168,7 +171,7 @@ namespace Service
         {
             return new ApplicationContext
             {
-                BrandName = "EXAMPLE INC",
+                BrandName = "Electronics INC",
                 LandingPage = "BILLING",
                 UserAction = "CONTINUE",
                 ShippingPreference = "SET_PROVIDED_ADDRESS",
@@ -180,11 +183,11 @@ namespace Service
         private double TotalToPay(double total_amount_items)
         {
             return total_amount_items +
-                /*   total_amount_items + total_amount_items * TransactionPayments.Tax +*/ //Sumando el % de taxes
-                
+
+                   (total_amount_items * TransactionPayments.Tax) + //Sumando el % de taxes
                    TransactionPayments.Shipping + //Sumando el shipping
                    TransactionPayments.Handling - //Sumando el handling
-                   TransactionPayments.Discount; //Sumando el discount.
+                   (total_amount_items * TransactionPayments.Discount); //Restando el % de discount.
         }
 
     }

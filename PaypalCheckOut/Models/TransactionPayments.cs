@@ -10,8 +10,8 @@ namespace PaypalCheckOut.Models
     public static class TransactionPayments
     {
         public static double Tax { get; set; } = 0.03;  //Un 3% de impuestos.
-        public static double Shipping { get; set; } = 10;
+        public static double Shipping { get; set; } = 10.55;
         public static double Handling { get; set; } = 5;
-        public static double Discount { get; set; } = 2;
+        public static double Discount { get; set; } = 0.01;  //1% de descuento
     }
 }

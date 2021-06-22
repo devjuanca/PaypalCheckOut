@@ -8,6 +8,7 @@ using Service;
 using Microsoft.AspNetCore.Http;
 using PayPalHttp;
 using PayPalCheckoutSdk.Orders;
+using System.Globalization;
 
 namespace PaypalCheckOut.Controllers
 {
@@ -25,9 +26,19 @@ namespace PaypalCheckOut.Controllers
 
         public IActionResult ShoppingCart()
         {
-            
-            ViewBag.Total = _cartServices.GetTotalToPay();
-            
+            var culture = CultureInfo.CreateSpecificCulture("es-ES");
+            ViewBag.SubTotal = _cartServices.GetTotalToPay().ToString("C", culture);
+            ViewBag.Tax = (_cartServices.GetTotalToPay() * TransactionPayments.Tax).ToString("c", culture);
+            ViewBag.Shipping = ( TransactionPayments.Shipping).ToString("c", culture);
+            ViewBag.Handling = ( TransactionPayments.Handling).ToString("c", culture);
+            ViewBag.Discount = (_cartServices.GetTotalToPay() * TransactionPayments.Discount).ToString("c", culture);
+            ViewBag.Total = (_cartServices.GetTotalToPay() 
+                + (_cartServices.GetTotalToPay() * TransactionPayments.Tax)
+                + TransactionPayments.Shipping 
+                + TransactionPayments.Handling 
+                - (_cartServices.GetTotalToPay() * TransactionPayments.Discount))
+                .ToString("c",culture);
+           
             return View(_cartServices.GetCartItems());
         }
 
