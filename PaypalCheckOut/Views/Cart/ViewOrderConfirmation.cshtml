@@ -1,0 +1,46 @@
+﻿@model PayPalCheckoutSdk.Payments.Capture
+
+<h1>Order Details</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+
+            </th>
+            <th>
+
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+                Status:
+            </td>
+            <td>
+                @Model.Status
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Order Id:
+            </td>
+            <td>
+                @Model.Id
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Amount:
+            </td>
+            <td>
+                @Model.Amount.Value @Model.Amount.CurrencyCode
+                
+            </td>
+        </tr>
+       
+
+
+    </tbody>
+</table>

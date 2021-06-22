@@ -1,0 +1,54 @@
+﻿@model PayPalCheckoutSdk.Orders.Order
+
+<h1>Order Details</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+
+            </th>
+            <th>
+
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+                Status:
+            </td>
+            <td>
+                @Model.Status
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Order Id:
+            </td>
+            <td>
+                @Model.Id
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Intent:
+            </td>
+            <td>
+                @Model.CheckoutPaymentIntent
+            </td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>
+                @{ 
+                    var approve_url = Model.Links.FirstOrDefault(a => a.Rel == "approve").Href;
+                }
+                <a class="btn btn-success" href="@approve_url" >Complete Payment in PayPal</a>
+            </td>
+
+        </tr>
+
+
+    </tbody>
+</table>
