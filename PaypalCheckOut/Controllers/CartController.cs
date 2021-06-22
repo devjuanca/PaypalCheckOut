@@ -52,6 +52,9 @@ namespace PaypalCheckOut.Controllers
 
             var authorized_order_result = response.Result<Order>();
 
+         //Este proceso debe dividirse un 2 partes. Hacer la autorización y mostra una vista con la data de los resultados, desglose de importes etc
+         //Y de ahi poner boton para continuar, capturar el pago y terminar la transaccion.
+         
             var authorizationId = authorized_order_result.PurchaseUnits[0].Payments.Authorizations[0].Id;
 
             var result = await _paypalService.CaptureOrder(authorizationId);
