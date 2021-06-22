@@ -26,6 +26,9 @@ namespace PaypalCheckOut.Controllers
 
         public IActionResult ShoppingCart()
         {
+          
+
+
             var culture = CultureInfo.CreateSpecificCulture("es-ES");
             ViewBag.SubTotal = _cartServices.GetTotalToPay().ToString("C", culture);
             ViewBag.Tax = (_cartServices.GetTotalToPay() * TransactionPayments.Tax).ToString("c", culture);

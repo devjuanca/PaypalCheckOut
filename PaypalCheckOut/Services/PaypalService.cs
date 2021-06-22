@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using PayPalHttp;
 using PayPalCheckoutSdk.Payments;
 using Money = PayPalCheckoutSdk.Orders.Money;
+using System.Globalization;
 
 /// <summary>
 /// Clase de servicios para el flujo de pago en Paypal. utilizando Intent = "Authorize" (El pago requiere autorización y ofrece reembolso.
@@ -105,7 +106,7 @@ namespace Service
                     UnitAmount = new PayPalCheckoutSdk.Orders.Money()
                     {
                         CurrencyCode = "EUR",
-                        Value = item.Price.MyToString()
+                        Value = item.Price.ToString(CultureInfo.InvariantCulture)
                     }
                 });
             }
@@ -113,22 +114,22 @@ namespace Service
             AmountWithBreakdown amount = new AmountWithBreakdown
             {
                 CurrencyCode = "EUR",
-                Value = TotalToPay(total_amount).MyToString(),
+                Value = TotalToPay(total_amount).ToString(CultureInfo.InvariantCulture),
 
                 AmountBreakdown = new AmountBreakdown
                 {
-                    ItemTotal = new Money { CurrencyCode = "EUR", Value = total_amount.ToString() },
+                    ItemTotal = new Money { CurrencyCode = "EUR", Value = total_amount.ToString(CultureInfo.InvariantCulture) },
                     TaxTotal = new Money
                     {
                         CurrencyCode = "EUR",
-                        Value = (total_amount * TransactionPayments.Tax).MyToString()
-                        
+                        Value = (total_amount * TransactionPayments.Tax).ToString(CultureInfo.InvariantCulture)
+
                     },
-                    Shipping = new Money { CurrencyCode = "EUR", Value = TransactionPayments.Shipping.MyToString() },
-                    Handling = new Money { CurrencyCode = "EUR", Value = TransactionPayments.Handling.MyToString() },
+                    Shipping = new Money { CurrencyCode = "EUR", Value = TransactionPayments.Shipping.ToString(CultureInfo.InvariantCulture) },
+                    Handling = new Money { CurrencyCode = "EUR", Value = TransactionPayments.Handling.ToString(CultureInfo.InvariantCulture) },
                     Discount = new Money { 
                         CurrencyCode = "EUR", 
-                        Value = (total_amount * TransactionPayments.Discount).MyToString() },
+                        Value = (total_amount * TransactionPayments.Discount).ToString(CultureInfo.InvariantCulture) },
 
 
                 }
